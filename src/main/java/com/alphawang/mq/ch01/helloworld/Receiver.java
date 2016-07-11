@@ -26,12 +26,16 @@ public class Receiver {
 		Connection connection = factory.newConnection();
 		Channel channel = connection.createChannel();
 
-		channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-		System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
-
 		// Note that we declare the queue here, as well.
 		// Because we might start the receiver before the sender,
 		// we want to make sure the queue exists before we try to consume messages from it.
+		channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+		System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
+
+
+		// Since it will push us messages asynchronously,
+		// we provide a callback in the form of an object that will buffer the messages until we're ready to use them.
+		// That is what a DefaultConsumer subclass does.
 		Consumer consumer = new DefaultConsumer(channel) {
 			@Override
 			public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body)
