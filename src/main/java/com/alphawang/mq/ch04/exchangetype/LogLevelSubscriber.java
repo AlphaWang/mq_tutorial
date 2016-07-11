@@ -1,6 +1,7 @@
-package com.alphawang.mq.ch03.exchanges;
+package com.alphawang.mq.ch04.exchangetype;
 
 import com.alphawang.mq.ChannelHelper;
+import com.alphawang.mq.ch03.exchanges.LogConst;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -14,7 +15,7 @@ import java.io.IOException;
 /**
  * Created by Alpha on 7/11/16.
  */
-public class LogSubscriber {
+public class LogLevelSubscriber {
 
 	public static void main(String[] args) throws IOException {
 		ChannelHelper helper = new ChannelHelper();
