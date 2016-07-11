@@ -6,6 +6,8 @@ import com.rabbitmq.client.Channel;
 
 /**
  * Created by Alpha on 7/11/16.
+ *
+ * refer to http://www.rabbitmq.com/tutorials/tutorial-one-java.html
  */
 public class Sender {
 
