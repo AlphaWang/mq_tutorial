@@ -26,7 +26,7 @@ public class Receiver {
 		ConnectionFactory factory = new ConnectionFactory();
 		factory.setHost("localhost");
 		Connection connection = factory.newConnection();
-		Channel channel = connection.createChannel();
+		final Channel channel = connection.createChannel();
 
 		channel.queueDeclare(QUEUE_NAME, false, false, false, null);
 		System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
@@ -51,9 +51,15 @@ public class Receiver {
 					e.printStackTrace();
 				} finally {
 					System.out.println(" [x] Done");
+
+					// With our current code, once RabbitMQ delivers a message to the customer it immediately removes it from memory.
+					// In this case, if you kill a worker we will lose the message it was just processing.
+					// We'll also lose all the messages that were dispatched to this particular worker but were not yet handled.
+					channel.basicAck(envelope.getDeliveryTag(), false);
 				}
 			}
 		};
+
 		channel.basicConsume(QUEUE_NAME, true, consumer);
 	}
 
