@@ -19,11 +19,13 @@ public class LogLevelPublisher {
 		ChannelHelper helper = new ChannelHelper();
 		Pair<Connection, Channel> pair = helper.create();
 
+		// direct: a message goes to the queues whose binding key exactly matches the routing key of the message.
 		Channel channel = pair.getValue();
-		channel.exchangeDeclare(LogConst.EXCHANGE_NAME, "fanout");
+		channel.exchangeDeclare(LogConst.EXCHANGE_NAME, "direct");
 
+		LogLevel logLevel = LogLevel.INFO;  // 每次publish, level会不一样
 		String log = "[info] test log " + Arrays.toString(args);
-		channel.basicPublish(LogConst.EXCHANGE_NAME, "", MessageProperties.PERSISTENT_TEXT_PLAIN, log.getBytes());
+		channel.basicPublish(LogConst.EXCHANGE_NAME, logLevel.name(), MessageProperties.PERSISTENT_TEXT_PLAIN, log.getBytes());
 		System.out.println("[x] Sent '" + log + "'");
 
 		helper.close(pair);

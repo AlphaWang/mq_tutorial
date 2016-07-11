@@ -21,8 +21,8 @@ public class LogSubscriber {
 		Pair<Connection, Channel> pair = helper.create();
 
 		Channel channel = pair.getValue();
-		channel.exchangeDeclare(LogConst.EXCHANGE_NAME, "fanout");
 
+		channel.exchangeDeclare(LogConst.EXCHANGE_NAME, "fanout");
 		String queueName = channel.queueDeclare().getQueue();
 
 		// The meaning of a binding key depends on the exchange type. The fanout exchanges simply ignored its value.

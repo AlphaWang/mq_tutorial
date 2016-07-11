@@ -22,13 +22,15 @@ public class LogLevelSubscriber {
 		Pair<Connection, Channel> pair = helper.create();
 
 		Channel channel = pair.getValue();
-		channel.exchangeDeclare(LogConst.EXCHANGE_NAME, "fanout");
 
+		channel.exchangeDeclare(LogConst.EXCHANGE_NAME, "direct");
 		String queueName = channel.queueDeclare().getQueue();
 
-		// The meaning of a binding key depends on the exchange type. The fanout exchanges simply ignored its value.
-		String routingKey = "";
-		channel.queueBind(queueName, LogConst.EXCHANGE_NAME, routingKey);
+		// 只监听指定的routing key
+		for (String level : args) {
+			String routingKey = level;
+			channel.queueBind(queueName, LogConst.EXCHANGE_NAME, routingKey);
+		}
 
 		System.out.println(" [*] Subscriber Queue '" + queueName + "'");
 		System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
