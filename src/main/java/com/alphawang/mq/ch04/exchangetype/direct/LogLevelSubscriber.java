@@ -1,4 +1,4 @@
-package com.alphawang.mq.ch04.exchangetype;
+package com.alphawang.mq.ch04.exchangetype.direct;
 
 import com.alphawang.mq.ChannelHelper;
 import com.alphawang.mq.ch03.exchanges.LogConst;
