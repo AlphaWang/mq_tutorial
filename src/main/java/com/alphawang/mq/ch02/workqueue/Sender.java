@@ -3,6 +3,7 @@ package com.alphawang.mq.ch02.workqueue;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.MessageProperties;
 
 /**
  * Created by Alpha on 7/11/16.
@@ -11,7 +12,7 @@ import com.rabbitmq.client.ConnectionFactory;
  */
 public class Sender {
 
-	private final static String QUEUE_NAME = "hello";
+	private final static String QUEUE_NAME = "durable_queue";
 
 	public static void main(String[] argv) throws java.io.IOException {
 
@@ -20,10 +21,11 @@ public class Sender {
 		Connection connection = factory.newConnection();
 		Channel channel = connection.createChannel();
 
-		channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+		boolean durable = true;
+		channel.queueDeclare(QUEUE_NAME, durable, false, false, null);
 
 		String message = getMessage(argv);
-		channel.basicPublish("", QUEUE_NAME, null, message.getBytes());
+		channel.basicPublish("", QUEUE_NAME, MessageProperties.PERSISTENT_TEXT_PLAIN, message.getBytes());
 		System.out.println(" [x] Sent '" + message + "'");
 
 		channel.close();

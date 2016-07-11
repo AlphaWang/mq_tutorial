@@ -17,7 +17,7 @@ import java.io.IOException;
  */
 public class Receiver {
 
-	private final static String QUEUE_NAME = "hello";
+	private final static String QUEUE_NAME = "durable_queue";
 
 	public static void main(String[] argv)
 		throws IOException,
@@ -28,7 +28,8 @@ public class Receiver {
 		Connection connection = factory.newConnection();
 		final Channel channel = connection.createChannel();
 
-		channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+		boolean durable = true;
+		channel.queueDeclare(QUEUE_NAME, durable, false, false, null);
 		System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
 
 		/**
