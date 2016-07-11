@@ -23,10 +23,14 @@ public class TopicSubscriber {
 
 		Channel channel = pair.getValue();
 
-		channel.exchangeDeclare(LogConst.EXCHANGE_NAME, "direct");
+		channel.exchangeDeclare(LogConst.EXCHANGE_NAME, "topic");
 		String queueName = channel.queueDeclare().getQueue();
 
-		// 只监听指定的routing key
+		// args:
+		// 1. `#`
+		// 2. `INFO.*`
+		//   * (star) can substitute for exactly one word.
+		//   # (hash) can substitute for zero or more words.
 		for (String level : args) {
 			String routingKey = level;
 			channel.queueBind(queueName, LogConst.EXCHANGE_NAME, routingKey);

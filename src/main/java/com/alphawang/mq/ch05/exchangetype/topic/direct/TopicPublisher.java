@@ -20,13 +20,15 @@ public class TopicPublisher {
 		ChannelHelper helper = new ChannelHelper();
 		Pair<Connection, Channel> pair = helper.create();
 
-		// direct: a message goes to the queues whose binding key exactly matches the routing key of the message.
+		// topic: a message sent with a particular routing key will be delivered to all the queues that are bound with a matching binding key
 		Channel channel = pair.getValue();
-		channel.exchangeDeclare(LogConst.EXCHANGE_NAME, "direct");
+		channel.exchangeDeclare(LogConst.EXCHANGE_NAME, "topic");
 
-		LogLevel logLevel = LogLevel.INFO;  // 每次publish, level会不一样
+		String source = channel.getClass().getName();
+		String routingKey =  LogLevel.INFO.name() + "." + source;
+
 		String log = "[info] test log " + Arrays.toString(args);
-		channel.basicPublish(LogConst.EXCHANGE_NAME, logLevel.name(), MessageProperties.PERSISTENT_TEXT_PLAIN, log.getBytes());
+		channel.basicPublish(LogConst.EXCHANGE_NAME, routingKey, MessageProperties.PERSISTENT_TEXT_PLAIN, log.getBytes());
 		System.out.println("[x] Sent '" + log + "'");
 
 		helper.close(pair);
